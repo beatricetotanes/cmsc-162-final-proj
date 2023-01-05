@@ -22,17 +22,17 @@ button_frame = Frame(root, width=int(
             root_width*0.7), height=int(root_height*0.14), highlightthickness=2, highlightbackground="black")
 button_frame.grid(column=0, row=1, sticky=EW)
 
-list = Listbox(root, height=10, width=15)
-list.grid(column=1, row=0)
-list.bind('<<ListboxSelect>>', lambda event: photo_frame.showPhotos1(event, list))
+side_frame = Frame(root, width=int(
+            root_width*0.2), height=int(root_height*0.7), highlightthickness=2, highlightbackground="black")
+side_frame.grid(column=1, row=0)
+
+list_label = Label(side_frame, text='Select image to view: ')
+list_label.grid(column=0, row=0)
+list = Listbox(side_frame, height=30, width=15)
+list.grid(column=0, row=1)
+list.bind('<<ListboxSelect>>', lambda event: photo_frame.showPhotos(event, list))
 
 upload_button = Button(button_frame, text="Upload Folder",
-                                command=lambda: photo_frame.testPhotos(list))
+                                command=lambda: photo_frame.setPhotos(list, side_frame=side_frame))
 upload_button.grid(column=0, row=0, ipadx=10, ipady=10, padx=10)
-
-# show_button = Button(button_frame, text="Show Photos",
-#                                 command=lambda: photo_frame.showPhotos())
-# show_button.grid(column=1, row=0, ipadx=10, ipady=10, padx=10)
-
-# root.config(menu=menu_bar) # Configuring the menu bar
 root.mainloop()

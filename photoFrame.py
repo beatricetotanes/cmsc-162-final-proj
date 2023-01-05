@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter.ttk import *
 from tkinter import *
-from utils import folder_path
+from utils import folder_path, resize_photo
 from PIL import Image, ImageTk
 import os
 import glob
@@ -14,8 +14,6 @@ class PhotoFrame:
         self.folder = ''
         self.images = []
         self.dict_img = {}
-        self.text_lbl = StringVar()
-        self.text_lbl.set("test")
 
         self.root_width = self.parent.winfo_width()
         self.root_height = self.parent.winfo_height()
@@ -25,30 +23,13 @@ class PhotoFrame:
         self.photo_frame.grid(column=0, row=0, sticky=NSEW)
 
         self.photo_frame.update()
-
+        
         self.photo_frame_width = self.photo_frame.winfo_width()
         self.photo_frame_height = self.photo_frame.winfo_height()
+        self.label = Label(self.photo_frame, width=int(self.photo_frame_width*0.9), height=int(self.photo_frame_height*0.9))
+        self.resized_dimens = (int(self.photo_frame_width*0.9),int(self.photo_frame_height*0.9))
 
-        
-
-        # self.textbox = Text(photo_frame)
-        # self.textbox.grid(column=0, row=0)
-
-    def setPhotos(self):
-        self.folder = folder_path()
-        file_directory = os.listdir(self.folder)
-        widths = []
-        heights = []
-        
-        self.images = glob.glob(self.folder + '/*.jpg')
-        
-        img = ImageTk.PhotoImage(file = '10067.jpeg')
-        print(img)
-        self.textbox.image_create(tk.END, image=img)
-        
-        # print(images)\
-
-    def testPhotos(self, list):
+    def setPhotos(self, list, side_frame):
         self.folder = folder_path()
         count = 0
 
@@ -63,38 +44,33 @@ class PhotoFrame:
             list.insert(count, basename)
             count+=1
             self.dict_img[basename] = j
-
-        print(self.images)
+        
+        list_vsb = Scrollbar(side_frame)
+        list_vsb.grid(column=1, row=1, sticky=NS)
+        list.config(yscrollcommand=list_vsb.set)
+        list_vsb.config(command=list.yview)
      
-    def showPhotos1(self, event, list):
+    def showPhotos(self, event, list,):
+        if list.size() == 0:
+            return
+            
         img_name = ''
-
-        tmp = StringVar()
-        tmp.set('test')
         
         for i in list.curselection():
             img_name = list.get(i)
 
-        # dimensions = (self.photo_frame.winfo_reqwidth(), self.photo_frame.winfo_reqheight())
         dimensions=(int(self.photo_frame_width*0.9),int(self.photo_frame_height*0.9))
-        print(dimensions)
 
         img = Image.open(self.dict_img[img_name])
-        print(img)
+
         # Resize image
-        img.thumbnail(dimensions, Image.LANCZOS)
-        img.resize(dimensions)
-        # image_tk = PhotoImage(img)
-        test = ImageTk.PhotoImage(img)
-        print(test)
+        img = resize_photo(dimensions=self.resized_dimens, img=img)
 
-        self.label = Label(self.photo_frame, image=test, width=int(self.photo_frame_width*0.9), height=int(self.photo_frame_height*0.9))
-        self.label.image = test
+        self.label.config(image=img)
+        self.label.image = img
         self.label.place(relx=0.5, rely=0.5, anchor=CENTER)
-        # self.label.configure(image=img)
-        # label.grid(column=0, row=0)
 
-        # print(list.curselection())
+
 
 
         
