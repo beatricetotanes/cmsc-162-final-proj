@@ -17,6 +17,7 @@ def folder_path():
     folder = filedialog.askdirectory()
     return folder
 
+# Resizes the photo according to the dimensions indicated
 def resize_photo(dimensions, img):
     img.thumbnail(dimensions, Image.LANCZOS)
     img.resize(dimensions)

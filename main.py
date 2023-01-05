@@ -14,18 +14,22 @@ root.update()
 root_width = root.winfo_width()
 root_height = root.winfo_height()
 
+# Initializes the Photo Frame
 photo_frame = PhotoFrame(parent=root)
 
+# Initializes the Side Frame
 side_frame = Frame(root, width=int(
             root_width*0.2), height=int(root_height*0.7), highlightthickness=2, highlightbackground="black")
 side_frame.grid(column=1, row=0)
 
+# Initializes the list selection for the images
 list_label = Label(side_frame, text='Select image to view: ')
 list_label.grid(column=0, row=0)
 list = Listbox(side_frame, height=30, width=15)
 list.grid(column=0, row=1)
 list.bind('<<ListboxSelect>>', lambda event: photo_frame.showPhotos(event, list))
 
+# Initializes the button frame for the buttons
 button_frame = ButtonFrame(parent=root, photoFrame=photo_frame, sideFrame=side_frame, list=list)
 
 root.mainloop()
