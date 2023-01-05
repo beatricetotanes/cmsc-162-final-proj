@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter.ttk import *
 from tkinter import *
-from utils import color_palette
+from tkinter import colorchooser
+from utils import ask_filepath
 
 class ButtonFrame:
 
@@ -29,8 +30,16 @@ class ButtonFrame:
         self.trans_bg = Button(self.button_frame, text='Transparent BG', command=lambda: print('trans'))
         self.trans_bg.grid(column=2, row=0, ipadx=10, ipady=10, padx=10)
 
-        self.color_bg = Button(self.button_frame, text='Color BG', command=lambda: color_palette())
+        self.color_bg = Button(self.button_frame, text='Color BG', command=lambda: self.color_palette())
         self.color_bg.grid(column=3, row=0, ipadx=10, ipady=10, padx=10)
 
-        self.img_bg = Button(self.button_frame, text='Image BG', command=lambda: print('img'))
+        self.img_bg = Button(self.button_frame, text='Image BG', command=lambda: self.setImageBG())
         self.img_bg.grid(column=4, row=0, ipadx=10, ipady=10, padx=10)
+
+    def setImageBG(self):
+        filepath = ask_filepath()
+        print(filepath)
+
+    def color_palette(self):
+        color = colorchooser.askcolor(title='Choose color')
+        return color # returns rgb tuple

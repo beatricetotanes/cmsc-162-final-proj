@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter.ttk import *
 from tkinter import *
 from utils import folder_path, resize_photo
-from PIL import Image, ImageTk
+from PIL import Image
 import os
 import glob
 
@@ -58,8 +58,6 @@ class PhotoFrame:
         
         for i in list.curselection():
             img_name = list.get(i)
-
-        dimensions=(int(self.photo_frame_width*0.9),int(self.photo_frame_height*0.9))
 
         img = Image.open(self.dict_img[img_name])
 

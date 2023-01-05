@@ -1,11 +1,8 @@
 import tkinter as tk
 from tkinter.ttk import *
 from tkinter import *
-from utils import color_palette
 from photoFrame import PhotoFrame
 from buttonFrame import ButtonFrame
-from PIL import Image, ImageTk
-import os
 
 #  Root window
 root = tk.Tk()
@@ -18,8 +15,6 @@ root_width = root.winfo_width()
 root_height = root.winfo_height()
 
 photo_frame = PhotoFrame(parent=root)
-
- 
 
 side_frame = Frame(root, width=int(
             root_width*0.2), height=int(root_height*0.7), highlightthickness=2, highlightbackground="black")
