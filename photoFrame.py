@@ -90,4 +90,4 @@ class PhotoFrame:
 
 # References:
 # https://www.geeksforgeeks.org/python-tkinter-listbox-widget/
-# https://www.pythontutorial.net/tkinter/tkinter-listbox/
+# https://www.pythontutorial.net/tkinter/tkinter-listbox/ 
