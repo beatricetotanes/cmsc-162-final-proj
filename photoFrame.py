@@ -41,6 +41,7 @@ class PhotoFrame:
         heights = []
         
         self.images = glob.glob(self.folder + '/*.jpg')
+        
         img = ImageTk.PhotoImage(file = '10067.jpeg')
         print(img)
         self.textbox.image_create(tk.END, image=img)
@@ -51,14 +52,19 @@ class PhotoFrame:
         self.folder = folder_path()
         count = 0
 
-        self.images = glob.glob(self.folder + ('/*.jpg')) 
+        self.images = glob.glob(self.folder + '/*.jpg') 
+        self.images+=glob.glob(self.folder + '/*.png')
+        self.images+=glob.glob(self.folder + '/*.gif')
+        self.images+=glob.glob(self.folder + '/*.jpeg')
+        self.images+=glob.glob(self.folder + '/*.pcx')
+
         for j in self.images:
             basename = os.path.basename(j)
             list.insert(count, basename)
             count+=1
             self.dict_img[basename] = j
 
-        print(self.dict_img)
+        print(self.images)
      
     def showPhotos1(self, event, list):
         img_name = ''
@@ -70,7 +76,7 @@ class PhotoFrame:
             img_name = list.get(i)
 
         # dimensions = (self.photo_frame.winfo_reqwidth(), self.photo_frame.winfo_reqheight())
-        dimensions=(self.photo_frame_width,self.photo_frame_height)
+        dimensions=(int(self.photo_frame_width*0.9),int(self.photo_frame_height*0.9))
         print(dimensions)
 
         img = Image.open(self.dict_img[img_name])
@@ -82,7 +88,7 @@ class PhotoFrame:
         test = ImageTk.PhotoImage(img)
         print(test)
 
-        self.label = Label(self.photo_frame, image=test, width=int(self.photo_frame_width), height=int(self.photo_frame_height))
+        self.label = Label(self.photo_frame, image=test, width=int(self.photo_frame_width*0.9), height=int(self.photo_frame_height*0.9))
         self.label.image = test
         self.label.place(relx=0.5, rely=0.5, anchor=CENTER)
         # self.label.configure(image=img)
