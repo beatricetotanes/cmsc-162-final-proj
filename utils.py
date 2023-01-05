@@ -5,7 +5,7 @@
 # --
 import tkinter as tk
 from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, colorchooser
 from PIL import Image, ImageTk
 
 # Opens a window to ask for the file the user wants to select and returns the filepath
@@ -24,3 +24,7 @@ def resize_photo(dimensions, img):
     img = ImageTk.PhotoImage(img)
 
     return img
+
+def color_palette():
+    color = colorchooser.askcolor(title='Choose color')
+    print(color)
