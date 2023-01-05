@@ -1,10 +1,8 @@
 import tkinter as tk
 from tkinter.ttk import *
 from tkinter import *
-from utils import folder_path
 from photoFrame import PhotoFrame
-from PIL import Image, ImageTk
-import os
+from buttonFrame import ButtonFrame
 
 #  Root window
 root = tk.Tk()
@@ -16,36 +14,22 @@ root.update()
 root_width = root.winfo_width()
 root_height = root.winfo_height()
 
+# Initializes the Photo Frame
 photo_frame = PhotoFrame(parent=root)
 
-button_frame = Frame(root, width=int(
-            root_width*0.7), height=int(root_height*0.14), highlightthickness=2, highlightbackground="black")
-button_frame.grid(column=0, row=1, sticky=EW)
-
+# Initializes the Side Frame
 side_frame = Frame(root, width=int(
             root_width*0.2), height=int(root_height*0.7), highlightthickness=2, highlightbackground="black")
 side_frame.grid(column=1, row=0)
 
+# Initializes the list selection for the images
 list_label = Label(side_frame, text='Select image to view: ')
 list_label.grid(column=0, row=0)
 list = Listbox(side_frame, height=30, width=15)
 list.grid(column=0, row=1)
 list.bind('<<ListboxSelect>>', lambda event: photo_frame.showPhotos(event, list))
 
-upload_button = Button(button_frame, text="Upload Folder",
-                                command=lambda: photo_frame.setPhotos(list, side_frame=side_frame))
-upload_button.grid(column=0, row=0, ipadx=10, ipady=10, padx=10)
-
-rm_bg = Button(button_frame, text='Remove Background', command=lambda: print('remove bg'))
-rm_bg.grid(column=1, row=0, ipadx=10, ipady=10, padx=10)
-
-trans_bg = Button(button_frame, text='Transparent BG', command=lambda: print('trans'))
-trans_bg.grid(column=2, row=0, ipadx=10, ipady=10, padx=10)
-
-color_bg = Button(button_frame, text='Color BG', command=lambda: print('color'))
-color_bg.grid(column=3, row=0, ipadx=10, ipady=10, padx=10)
-
-img_bg = Button(button_frame, text='Image BG', command=lambda: print('img'))
-img_bg.grid(column=4, row=0, ipadx=10, ipady=10, padx=10)
+# Initializes the button frame for the buttons
+button_frame = ButtonFrame(parent=root, photoFrame=photo_frame, sideFrame=side_frame, list=list)
 
 root.mainloop()
