@@ -35,4 +35,17 @@ list.bind('<<ListboxSelect>>', lambda event: photo_frame.showPhotos(event, list)
 upload_button = Button(button_frame, text="Upload Folder",
                                 command=lambda: photo_frame.setPhotos(list, side_frame=side_frame))
 upload_button.grid(column=0, row=0, ipadx=10, ipady=10, padx=10)
+
+rm_bg = Button(button_frame, text='Remove Background', command=lambda: print('remove bg'))
+rm_bg.grid(column=1, row=0, ipadx=10, ipady=10, padx=10)
+
+trans_bg = Button(button_frame, text='Transparent BG', command=lambda: print('trans'))
+trans_bg.grid(column=2, row=0, ipadx=10, ipady=10, padx=10)
+
+color_bg = Button(button_frame, text='Color BG', command=lambda: print('color'))
+color_bg.grid(column=3, row=0, ipadx=10, ipady=10, padx=10)
+
+img_bg = Button(button_frame, text='Image BG', command=lambda: print('img'))
+img_bg.grid(column=4, row=0, ipadx=10, ipady=10, padx=10)
+
 root.mainloop()
