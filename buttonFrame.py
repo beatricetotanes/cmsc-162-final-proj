@@ -56,3 +56,5 @@ class ButtonFrame:
     def color_palette(self):
         color = colorchooser.askcolor(title='Choose color')
         return color # returns rgb tuple
+
+    # Reference: https://www.geeksforgeeks.org/python-tkinter-choose-color-dialog/ 

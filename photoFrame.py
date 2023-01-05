@@ -88,7 +88,6 @@ class PhotoFrame:
         self.label.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 
-
-
-        
-
+# References:
+# https://www.geeksforgeeks.org/python-tkinter-listbox-widget/
+# https://www.pythontutorial.net/tkinter/tkinter-listbox/
