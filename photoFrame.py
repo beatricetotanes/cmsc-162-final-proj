@@ -1,7 +1,7 @@
 # In charge of the photos in the folder
 
 from tkinter.ttk import Scrollbar
-from tkinter import Label, Frame
+from tkinter import Label, Frame, messagebox
 from utils import folder_path, resize_photo
 from PIL import Image
 from os import walk
@@ -11,7 +11,7 @@ from ResultWindow import ResultWindow
 
 
 class PhotoFrame(Frame):
-    def __init__(self, parent, side_frame, list_widget):
+    def __init__(self, parent, side_frame, list_widget, done_list):
         super().__init__(
             parent,
             width=int(parent.winfo_width() * 0.7),
@@ -24,6 +24,7 @@ class PhotoFrame(Frame):
         self.folder: str | None = None
         self.images = []
         self.dict_img = {}
+        self.processed_images = []
 
         # Gets size of the photo frame
         self.update_idletasks()
@@ -39,11 +40,15 @@ class PhotoFrame(Frame):
 
         # Instance of the list_widget
         self.list_widget = list_widget
+        self.done_list = done_list
 
         # Creates a scrollbar
         self.list_scrollbar = Scrollbar(side_frame)
         self.list_widget.config(yscrollcommand=self.list_scrollbar.set)
         self.list_scrollbar.config(command=list_widget.yview)
+        self.done_list_scrollbar = Scrollbar(side_frame)
+        self.done_list.config(yscrollcommand=self.done_list_scrollbar.set)
+        self.done_list_scrollbar.config(command=done_list.yview)
 
     # Gets all the photos from the folder and creates a menu through the list box.
     # The user can choose which image to display
@@ -52,6 +57,8 @@ class PhotoFrame(Frame):
 
         self.list_widget.delete(0, "end")
         self.label.grid_forget()
+        self.dict_img = {}
+        self.processed_images = []
         count = 0
 
         # All valid file types
@@ -72,6 +79,7 @@ class PhotoFrame(Frame):
                     count += 1
 
         self.list_scrollbar.grid(column=1, row=1, sticky="ns")
+        self.done_list_scrollbar.grid(column=3, row=1, sticky="ns")
 
     def get_curr_image(self, get_path=False):
         # Does nothing if no folder is uploaded
@@ -109,6 +117,26 @@ class PhotoFrame(Frame):
         self.label.image = img
         self.label.place(relx=0.5, rely=0.5, anchor="center")
 
+    def show_done_photos(self, *_):
+        # Does nothing if no folder is uploaded
+        if self.done_list.size() == 0:
+            return None
+
+        img_idx = ''
+
+        # Gets currently selected image
+        for idx in self.done_list.curselection():
+            img_idx = int(idx)
+
+        if img_idx == '':
+            return
+
+        image = Image.fromarray(self.processed_images[img_idx][1])
+        image = resize_photo(dimensions=self.resized_dimensions, img=image)
+        self.label.config(image=image)
+        self.label.image = image
+        self.label.place(relx=0.5, rely=0.5, anchor="center")
+
     def remove_curr_bg(self):
         img_path = self.get_curr_image(get_path=True)
         if img_path is None:
@@ -117,7 +145,28 @@ class PhotoFrame(Frame):
         img = cv2.imread(img_path)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        ResultWindow(self, img)
+        ResultWindow(self, img, self.add_applied_image)
+
+    def add_applied_image(self, image):
+        # Gets currently selected image
+        for idx in self.list_widget.curselection()[::-1]:
+            img_name = self.list_widget.get(idx)
+            self.processed_images.append((img_name, image))
+            self.done_list.insert("end", img_name)
+            self.list_widget.delete(idx)
+            self.label.grid_forget()
+
+    def save_all(self):
+        if len(self.dict_img) == 0 and len(self.processed_images) == 0:
+            return
+
+        file_path = folder_path()
+
+        for image in self.processed_images:
+            final_img = cv2.cvtColor(image[1], cv2.COLOR_BGRA2RGBA)
+            cv2.imwrite(f"{file_path}/edited_{image[0]}.png", final_img)
+
+        messagebox.showinfo("Success", "Done saving all images!")
 
 # References:
 # https://www.geeksforgeeks.org/python-tkinter-listbox-widget/

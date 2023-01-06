@@ -1,7 +1,6 @@
-from tkinter import Toplevel, Label, Button, Scale, IntVar, filedialog, messagebox
+from tkinter import Toplevel, Label, Button, Scale, IntVar, filedialog
 from tkinter.colorchooser import askcolor
 
-# from PIL.ImageGrab import grab
 from PIL.Image import fromarray
 from PIL.ImageTk import PhotoImage
 
@@ -10,10 +9,11 @@ from utils import remove_bg, resize_photo, swap_color, swap_bg_img
 
 
 class ResultWindow(Toplevel):
-    def __init__(self, parent, image, title="Resulting Image"):
+    def __init__(self, parent, image, add_applied_image):
         Toplevel.__init__(self, parent)
-        self.title(title)
+        self.title("Result")
         self.parent = parent
+        self.add_applied_image = add_applied_image
 
         self.cv2_image = image
         self.__curr_image = image
@@ -29,10 +29,9 @@ class ResultWindow(Toplevel):
         self.update_image(self.cv2_image)
 
         Button(self, command=self.get_color, text="Choose color to remove (Color Palette)").grid(column=0, row=1)
-        # Button(self, command=self.get_coordinates, text="Choose color to remove (Mouse Click)").grid(column=0, row=2)
         Button(self, command=self.choose_color, text="Choose color to replace background").grid(column=0, row=2)
         Button(self, command=self.choose_image, text="Choose image to replace background").grid(column=0, row=3)
-        Button(self, command=self.save_curr_img, text="Save image").grid(column=0, row=5)
+        Button(self, command=self.save_curr_img, text="Mark as done").grid(column=0, row=5)
 
         # Adjust image threshold
         Label(self, text="Change image threshold").grid(column=1, row=1)
@@ -156,15 +155,10 @@ class ResultWindow(Toplevel):
         self.update_image(new_image)
 
     def save_curr_img(self):
-        file_path = filedialog.asksaveasfilename(
-            initialfile="new_img",
-            title="Save image...",
-            filetypes=[("PNG File", "*.png"), ("Any file", "*.*")],
-            defaultextension="*.png")
-        print(file_path)
-
-        bgra_img = cv2.cvtColor(self.__curr_image, cv2.COLOR_RGBA2BGRA)
-        cv2.imwrite(file_path, bgra_img)
+        self.add_applied_image(self.__curr_image)
+        self.deiconify()
+        self.destroy()
+        self.update()
 
     def choose_color(self):
         color: tuple[tuple, str] | None = None
@@ -188,38 +182,3 @@ class ResultWindow(Toplevel):
         new_img = swap_bg_img(self.__curr_image, new_bg)
         self.update_image(new_img)
 
-    """
-    def handle_mouse_click(self, event):
-        image = grab()
-        print(event.x, event.y)
-        color = self.__curr_image[event.y][event.x]
-        print(color)
-        if len(color) > 3:
-            color = color[:3]
-
-        self.__color = tuple(color)
-
-        threshold = self.threshold_value.get()
-        lower_sat = self.lower_sat_value.get()
-        lower_val = self.lower_val_value.get()
-
-        upper_sat = self.upper_sat_value.get()
-        upper_val = self.upper_val_value.get()
-
-        new_image = remove_bg(self.cv2_image,
-                              self.__color,
-                              threshold=threshold,
-                              lower_saturation=lower_sat,
-                              lower_value=lower_val,
-                              upper_saturation=upper_sat,
-                              upper_value=upper_val)
-        self.__curr_image = new_image
-        self.update_image(new_image)
-
-        self.image_display.unbind("<Button-1>")
-
-    def get_coordinates(self):
-        self.image_display.bind("<Button-1>", self.handle_mouse_click)
-        messagebox.showinfo("How to use", "Please click the color you want to remove in the image screen.")
-
-    """

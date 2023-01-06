@@ -27,13 +27,18 @@ list_label.grid(column=0, row=0)
 list_widget = Listbox(side_frame, height=30, width=20)
 list_widget.grid(column=0, row=1)
 
-# Initializes the Photo Frame
-photo_frame = PhotoFrame(root, side_frame, list_widget)
+Label(side_frame, text="Processed images").grid(column=2, row=0)
+done_list = Listbox(side_frame, height=30, width=20)
+done_list.grid(column=2, row=1)
 
-list_widget.bind('<<ListboxSelect>>', lambda event: photo_frame.show_photos(event, list_widget))
+# Initializes the Photo Frame
+photo_frame = PhotoFrame(root, side_frame, list_widget, done_list)
+
+list_widget.bind('<<ListboxSelect>>', photo_frame.show_photos)
+done_list.bind('<<ListboxSelect>>', photo_frame.show_done_photos)
 
 # Initializes the button frame for the buttons
-button_frame = ButtonFrame(root, photo_frame.set_photos, photo_frame.remove_curr_bg)
+button_frame = ButtonFrame(root, photo_frame.set_photos, photo_frame.remove_curr_bg, photo_frame.save_all)
 button_frame.grid(column=0, row=1, sticky="ew")
 
 root.mainloop()
