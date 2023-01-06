@@ -103,8 +103,11 @@ def swap_color(image, color):
 
 
 def swap_bg_img(image, bg):
-    indices = np.argwhere(image == 0)
-    for idx in indices:
-        image[idx[0]][idx[1]] = bg[idx[0]][idx[1]]
+    try:
+        indices = np.argwhere(image == 0)
+        for idx in indices:
+            image[idx[0]][idx[1]] = bg[idx[0]][idx[1]]
+    except IndexError:
+        return None
 
     return image
