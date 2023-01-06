@@ -56,6 +56,7 @@ class PhotoFrame(Frame):
         self.folder = folder_path()  # asks user which folder to upload
 
         self.list_widget.delete(0, "end")
+        self.done_list.delete(0, "end")
         self.label.grid_forget()
         self.dict_img = {}
         self.processed_images = []
@@ -151,6 +152,13 @@ class PhotoFrame(Frame):
         # Gets currently selected image
         for idx in self.list_widget.curselection()[::-1]:
             img_name = self.list_widget.get(idx)
+            image_pil = Image.fromarray(image)
+            image_pil = resize_photo(dimensions=self.resized_dimensions, img=image_pil)
+
+            self.label.config(image=image_pil)
+            self.label.image = image_pil
+            self.label.place(relx=0.5, rely=0.5, anchor="center")
+
             self.processed_images.append((img_name, image))
             self.done_list.insert("end", img_name)
             self.list_widget.delete(idx)
