@@ -1,35 +1,39 @@
 import tkinter as tk
-from tkinter.ttk import *
-from tkinter import *
+from tkinter import Frame, Label, Listbox
 from photoFrame import PhotoFrame
 from buttonFrame import ButtonFrame
 
 #  Root window
 root = tk.Tk()
-root.title('Programming Project') # IDE Title
-root.geometry('1280x720') # Size of Window
+root.title('Programming Project')  # IDE Title
+root.geometry('1280x720')  # Size of Window
 root.update()
 
 # Gets main window size
 root_width = root.winfo_width()
 root_height = root.winfo_height()
-
-# Initializes the Photo Frame
-photo_frame = PhotoFrame(parent=root)
+root.rowconfigure(0, weight=2)
 
 # Initializes the Side Frame
-side_frame = Frame(root, width=int(
-            root_width*0.2), height=int(root_height*0.7), highlightthickness=2, highlightbackground="black")
-side_frame.grid(column=1, row=0)
+side_frame = Frame(root,
+                   width=int(root_width * 0.5),
+                   highlightthickness=2,
+                   highlightbackground="black")
+side_frame.grid(column=1, row=0, rowspan=2, sticky="nse")
 
 # Initializes the list selection for the images
 list_label = Label(side_frame, text='Select image to view: ')
 list_label.grid(column=0, row=0)
-list = Listbox(side_frame, height=30, width=15)
-list.grid(column=0, row=1)
-list.bind('<<ListboxSelect>>', lambda event: photo_frame.showPhotos(event, list))
+list_widget = Listbox(side_frame, height=30, width=20)
+list_widget.grid(column=0, row=1)
+
+# Initializes the Photo Frame
+photo_frame = PhotoFrame(root, side_frame, list_widget)
+
+list_widget.bind('<<ListboxSelect>>', lambda event: photo_frame.show_photos(event, list_widget))
 
 # Initializes the button frame for the buttons
-button_frame = ButtonFrame(parent=root, photoFrame=photo_frame, sideFrame=side_frame, list=list)
+button_frame = ButtonFrame(root, photo_frame.set_photos, photo_frame.remove_curr_bg)
+button_frame.grid(column=0, row=1, sticky="ew")
 
 root.mainloop()
