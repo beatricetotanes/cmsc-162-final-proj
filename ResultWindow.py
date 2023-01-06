@@ -216,7 +216,7 @@ class ResultWindow(Toplevel):
             messagebox.showerror("Invalid Image", "Image dimensions are too big")
         else:
             self.update_image(new_img)
-            self.image_btn.grid(column=0, row=3)
+        self.image_btn.grid(column=0, row=3)
         bar.destroy()
         bar.update()
 
