@@ -23,7 +23,7 @@ class ButtonFrame(Frame):
         self.rm_bg = Button(self, text='Remove Background', command=remove_bg)
         self.rm_bg.grid(column=1, row=0, ipadx=10, ipady=10, padx=10)
 
-        # For removal of background of all images
-        self.rm_bg = Button(self, text='Save all', command=save_all)
-        self.rm_bg.grid(column=2, row=0, ipadx=10, ipady=10, padx=10)
+        # For saving all images
+        self.save = Button(self, text='Save all', command=save_all)
+        self.save.grid(column=2, row=0, ipadx=10, ipady=10, padx=10)
     # Reference: https://www.geeksforgeeks.org/python-tkinter-choose-color-dialog/
