@@ -9,20 +9,17 @@ import numpy as np
 from colorsys import rgb_to_hsv as colorsys_rgb_to_hsv
 
 
-def rgb_to_hsv(values: tuple[int, int, int]):
+def rgb_to_hsv(values):
     # Convert to percentages
-    float_rgb = [float(val / 255) for val in values]
+    float_rgb = values / 255
 
     # Convert via colorsys library
     float_hsv = colorsys_rgb_to_hsv(*float_rgb)
 
     # Convert to integers
-    int_hsv = []
-    for idx, val in enumerate(float_hsv):
-        if idx == 0:
-            int_hsv.append(int(180 * val))
-        else:
-            int_hsv.append(int(255 * val))
+    int_hsv = [int(float_hsv[0] * 180),
+               int(float_hsv[1] * 255),
+               int(float_hsv[2] * 255)]
 
     return int_hsv
 
@@ -43,7 +40,7 @@ def remove_bg(image,
         return
 
     # Convert RGB values to HSV
-    hsv_color = rgb_to_hsv(color_to_isolate)
+    hsv_color = rgb_to_hsv(np.asarray(color_to_isolate))
 
     lower = np.asarray([hsv_color[0] - threshold, lower_saturation, lower_value])
     upper = np.asarray([hsv_color[0] + threshold, upper_saturation, upper_value])
@@ -94,19 +91,19 @@ def resize_photo(dimensions, img):
     return ImageTk.PhotoImage(img)
 
 
-def swap_color(image, color):
+def swap_color(original, color):
+    image = original.copy()
     indices = np.argwhere(image == 0)
-    for idx in indices:
-        image[idx[0]][idx[1]] = np.array([*color, 255])
-
+    new_color = np.array([*color, 255])
+    image[indices[:, 0], indices[:, 1]] = new_color
     return image
 
 
-def swap_bg_img(image, bg):
+def swap_bg_img(original, bg):
     try:
+        image = original.copy()
         indices = np.argwhere(image == 0)
-        for idx in indices:
-            image[idx[0]][idx[1]] = bg[idx[0]][idx[1]]
+        image[indices[:, 0], indices[:, 1]] = bg[indices[:, 0], indices[:, 1]]
     except IndexError:
         return None
 
