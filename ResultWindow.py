@@ -213,7 +213,7 @@ class ResultWindow(Toplevel):
         file_path = filedialog.askopenfilename(
             initialfile="new_img",
             title="Save image...",
-            filetypes=[("PNG File", "*.png"), ("Any file", "*.*")],
+            filetypes=[("PNG File", "*.png"), ("JPG File", "*.jpg"), ("GIF File", "*.gif"), ("Any file", "*.*")],
             defaultextension="*.png")
         if file_path is None or file_path == () or file_path == "":
             bar.destroy()

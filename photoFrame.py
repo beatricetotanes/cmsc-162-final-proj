@@ -96,7 +96,6 @@ class PhotoFrame(Frame):
             img_name = self.list_widget.get(idx)
             if for_removal:
                 self.selected_image = (img_name, int(idx))
-                print(self.selected_image)
 
         if img_name is None or img_name == '':
             return
